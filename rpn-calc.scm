@@ -21,6 +21,9 @@
 		 ((string=? input-string "exit") #f)
 		 ((string=? input-string "clr") '())
 		 ((string=? input-string "rem") (if (eqv? stack '()) '() (cdr stack)))
+		 ((string=? input-string "pi") (cons (acos -1) stack))
+		 ((string=? input-string "golden") (cons (/ (+ 1 (sqrt 5)) 2) stack))
+		 ((string=? input-string "silver") (cons (+ 1 (sqrt 2)) stack))
 		 (else (apply apply-on-stack
 					  (cond
 					   ((string=? input-string "+") (list + 2 stack))
