@@ -46,7 +46,8 @@
 					   ((string=? input-string "inexact") (list exact->inexact 1 stack))
 					   (else (list values 1 stack)))))))))
 
-(do ((stack '() (read-command stack)))
-	((eqv? stack #f) '())
-  (begin (print ">>> " stack)(print* "<<< ")))
+(define (main args)
+  (do ((stack '() (read-command stack)))
+      ((eqv? stack #f) '())
+    (begin (print ">>> " stack)(print* "<<< "))))
 				
