@@ -1,4 +1,6 @@
-(import (chicken io))
+(import (chicken io)
+	(chicken random)
+	(chicken string))
 
 (define (list-head list k)
   (if (zero? k)
@@ -12,15 +14,34 @@
 			(list-tail stack num-args))
 	  stack))
 
+(define (dice no-dice no-sides)
+  (if (= 0 no-dice)
+      0
+      (+ (add1 (pseudo-random-integer no-sides))
+	 (dice (sub1 no-dice) no-sides))))
+
+(define (dnote? string)
+  (let ((arg (string-split string "\\")))
+    (and (= 2 (length arg))
+	 (string->number (car arg))
+	 (string->number (car (cdr arg))))))
+
+(define (dnote string)
+  (let* ((arg (string-split string "\\"))
+	 (no-dice (string->number (car arg)))
+	 (no-sides (string->number (car (cdr arg)))))
+    (dice no-dice no-sides)))
+
 (define (read-command stack)
   (let* ((input-string (read-line))
 		 (input-number (string->number input-string)))
 	(if (number? input-number)
 		(cons input-number stack)
 		(cond
+		 ((dnote? input-string) (cons (dnote input-string) stack))
 		 ((string=? input-string "exit") #f)
 		 ((string=? input-string "clr") '())
-		 ((string=? input-string "rem") (if (eqv? stack '()) '() (cdr stack)))
+		 ((string=? input-string "rem") (if (null? stack) '() (cdr stack)))
 		 ((string=? input-string "e") (cons (exp 1) stack))
 		 ((string=? input-string "pi") (cons (acos -1) stack))
 		 ((string=? input-string "golden") (cons (/ (+ 1 (sqrt 5)) 2) stack))
