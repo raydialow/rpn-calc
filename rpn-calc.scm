@@ -28,8 +28,8 @@
 
 (define (dnote string)
   (let* ((arg (string-split string "\\"))
-	 (no-dice (string->number (car arg)))
-	 (no-sides (string->number (car (cdr arg)))))
+	 (no-dice (inexact->exact (round (real-part (string->number (car arg))))))
+	 (no-sides (inexact->exact (round (real-part (string->number (car (cdr arg))))))))
     (dice no-dice no-sides)))
 
 (define (read-command stack)
